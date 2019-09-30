@@ -2,9 +2,7 @@ package kgsa3c
 
 import (
 	"errors"
-	"fmt"
 
-	"github.com/sirupsen/logrus"
 	"github.com/synchthia/remonpi/util"
 )
 
@@ -26,9 +24,7 @@ func Send(c *Controller) error {
 	}
 
 	// TODO: Send
-	code := util.SignalToCode(430, signal, 13300)
-	logrus.Println("Emitted")
-	fmt.Println(code)
+	util.SignalToCode(430, signal, 13300)
 
 	return nil
 }

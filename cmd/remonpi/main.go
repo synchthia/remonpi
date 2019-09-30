@@ -1,9 +1,11 @@
 package main
 
 import (
+	"errors"
 	"os"
 
 	"github.com/sirupsen/logrus"
+	"github.com/synchthia/remonpi/database"
 	"github.com/synchthia/remonpi/logger"
 	"github.com/synchthia/remonpi/remote"
 	"github.com/synchthia/remonpi/server"
@@ -16,6 +18,13 @@ func startHTTPServer(port string, remote *remote.Remote) error {
 func main() {
 	logger.Init()
 	logrus.Infof("[RemonPi] Initialize...")
+
+	// Database
+	dbPath := os.Getenv("REMONPI_DB_PATH")
+	if len(dbPath) == 0 {
+		panic(errors.New("REMONPI_DB_PATH does not defined!"))
+	}
+	database.NewDatabase(dbPath)
 
 	// Remote
 	vendor := os.Getenv("REMONPI_VENDOR")
