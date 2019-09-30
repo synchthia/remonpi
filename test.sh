@@ -32,6 +32,16 @@ if [ "$1" = "remote" ]; then
                 http://localhost:8080/api/v1/remote | jq .
             set +x
         fi
+        if [ "$3" = "dry" ]; then
+            set -x
+            curl \
+                -X POST \
+                -H 'Content-Type: application/json' \
+                -d '{"operation": true, "mode": "dry", "fan": "auto", "vertical_vane": "auto", "horizontal_vane": "keep"}' \
+                http://localhost:8080/api/v1/remote | jq .
+            set +x
+        fi
+
         if [ "$3" = "invalid" ]; then
             set -x
             curl \

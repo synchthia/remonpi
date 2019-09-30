@@ -26,6 +26,10 @@ func NewHTTPServer(remote *remote.Remote) *gin.Engine {
 	// Remote
 	r.GET("/api/v1/remote", h.getRemote)
 	r.POST("/api/v1/remote", h.postRemote)
+
+	// Template
+	r.GET("api/v1/template", h.getTemplate)
+
 	return r
 }
 
@@ -51,5 +55,11 @@ func (h *httpServer) postRemote(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+	}
+}
+
+func (h *httpServer) getTemplate(c *gin.Context) {
+	if h.Remote.Vendor == "mitsubishi" && h.Remote.Model == "kgsa3-c" {
+		c.JSON(http.StatusOK, kgsa3c.GetTemplate())
 	}
 }

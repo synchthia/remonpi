@@ -34,6 +34,12 @@ func Send(c *Controller) error {
 }
 
 func generate(c *Controller) ([][]int, error) {
+	template := GetTemplate()
+	templateByMode, err := template.GetTemplateByMode(c.Mode)
+	if err != nil {
+		return nil, err
+	}
+
 	signal := [][]int{
 		{0x23, 0xCB, 0x26, 0x01, 0x00, 0x24, 0x03, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
 	}
@@ -57,12 +63,13 @@ func generate(c *Controller) ([][]int, error) {
 	}
 
 	// Temp
-	if c.Temp >= 16.0 && c.Temp <= 31.0 {
-		signal[0][7] = int(31.0 - c.Temp)
-	} else {
-		return nil, errors.New("invalid temp provided")
+	if templateByMode.Temp.Type != "DISABLED" {
+		if c.Temp >= templateByMode.Temp.Range.From && c.Temp <= templateByMode.Temp.Range.To {
+			signal[0][7] = int(templateByMode.Temp.Range.To - c.Temp)
+		} else {
+			return nil, errors.New("invalid temp provided")
+		}
 	}
-
 	signal[0][8] = 0x00
 
 	// Fan
