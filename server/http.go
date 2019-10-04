@@ -28,7 +28,7 @@ func NewHTTPServer(remote *remote.Remote) *gin.Engine {
 	r.POST("/api/v1/remote", h.postRemote)
 
 	// Template
-	r.GET("api/v1/template", h.getTemplate)
+	r.GET("/api/v1/template", h.getTemplate)
 
 	return r
 }
@@ -51,7 +51,7 @@ func (h *httpServer) postRemote(c *gin.Context) {
 		}
 
 		// Generate & Send IR Signal
-		if err := kgsa3c.Send(&controller); err != nil {
+		if err := controller.Send(); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}

@@ -19,8 +19,8 @@ type Controller struct {
 }
 
 // Send - Generate & Send IR Signal
-func Send(c *Controller) error {
-	signal, err := generate(c)
+func (c *Controller) Send() error {
+	signal, err := c.Generate()
 	if err != nil {
 		return err
 	}
@@ -33,7 +33,7 @@ func Send(c *Controller) error {
 	return nil
 }
 
-func generate(c *Controller) ([][]int, error) {
+func (c *Controller) Generate() ([][]int, error) {
 	template := GetTemplate()
 	templateByMode, err := template.GetTemplateByMode(c.Mode)
 	if err != nil {
