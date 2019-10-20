@@ -20,7 +20,8 @@ func main() {
 	// Remote
 	vendor := os.Getenv("REMONPI_VENDOR")
 	model := os.Getenv("REMONPI_MODEL")
-	r := remote.NewRemote(vendor, model)
+	dbPath := os.Getenv("REMONPI_DATABASE_PATH")
+	r := remote.NewRemote(vendor, model, dbPath)
 
 	// Initialize HTTP Server...
 	httpPort := os.Getenv("HTTP_PORT")
