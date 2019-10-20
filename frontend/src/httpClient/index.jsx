@@ -1,6 +1,4 @@
-import React from 'react';
 import Axios from 'axios';
-import store from '../store';
 
 const axios = Axios.create({});
 axios.interceptors.response.use(

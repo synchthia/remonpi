@@ -1,4 +1,4 @@
-import { Button, Nav, Navbar, Row, Spinner } from 'react-bootstrap';
+import { Button, Navbar, Row, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { connect } from 'react-redux';
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
