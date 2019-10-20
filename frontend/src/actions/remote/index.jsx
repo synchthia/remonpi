@@ -1,3 +1,4 @@
+import { API_URL } from '../../config/env';
 import httpClient from '../../httpClient';
 
 export function fetchRemoteSuccess(payload) {
@@ -10,7 +11,7 @@ export function fetchRemoteSuccess(payload) {
 export function fetchRemote(dispatch) {
     const request = httpClient({
         method: 'GET',
-        url: 'http://aurs7r4.local:8080/api/v1/remote',
+        url: `${API_URL}/api/v1/remote`,
     })
         .then(response => dispatch(fetchRemoteSuccess(response.data)))
         .catch(error => error.response);
@@ -23,7 +24,7 @@ export function fetchRemote(dispatch) {
 export function fetchRemoteByMode(dispatch, mode) {
     const request = httpClient({
         method: 'GET',
-        url: 'http://aurs7r4.local:8080/api/v1/remote',
+        url: `${API_URL}/api/v1/remote`,
         params: {
             mode: mode
         }
@@ -56,7 +57,7 @@ export function postRemote(dispatch, payload) {
     console.log(payload)
     const request = httpClient({
         method: 'POST',
-        url: 'http://aurs7r4.local:8080/api/v1/remote',
+        url: `${API_URL}/api/v1/remote`,
         headers: {'Content-Type': 'application/json'},
         data: payload,
     })

@@ -1,3 +1,4 @@
+import { API_URL } from '../../config/env';
 import httpClient from '../../httpClient';
 
 export function getRemoteStateSuccess(payload) {
@@ -10,7 +11,7 @@ export function getRemoteStateSuccess(payload) {
 export function getRemoteState(dispatch) {
     const request = httpClient({
         method: 'GET',
-        url: 'http://aurs7r4.local:8080/api/v1/state',
+        url: `${API_URL}/api/v1/state`
     })
         .then(response => dispatch(getRemoteStateSuccess(response.data)))
         .catch(error => error.response);
@@ -19,4 +20,3 @@ export function getRemoteState(dispatch) {
         payload: request
     }
 }
-
