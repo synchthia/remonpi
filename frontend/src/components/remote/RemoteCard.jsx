@@ -218,10 +218,6 @@ class RemoteCard extends React.Component {
     }
 }
 
-const Control = styled.div`
-    background-color: #242424;
-`
-
 const CardBase = styled.div`
     background-color: #FAFAFA;
 `
