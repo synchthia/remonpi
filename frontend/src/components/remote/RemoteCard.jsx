@@ -1,7 +1,7 @@
 import { Button, Navbar, Row, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { connect } from 'react-redux';
-import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
+import { faPowerOff, faTerminal } from '@fortawesome/free-solid-svg-icons'
 import React from 'react';
 import styled from 'styled-components';
 
@@ -107,8 +107,11 @@ class RemoteCard extends React.Component {
 
         return (
             <div>
-                <Navbar bg="secondary" variant="light">
-                    <Navbar.Brand>{'[XAR] IR // ONLINE'}</Navbar.Brand>
+                <Navbar variant="light">
+                    <Navbar.Brand>
+                        <FontAwesomeIcon icon={faTerminal} />
+                        <span style={{margin: "0.5em"}}>{'Debug //'}</span>
+                    </Navbar.Brand>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Button
                             status={"N/A"}
