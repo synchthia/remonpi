@@ -1,18 +1,18 @@
 import { Button, Navbar, Row, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { connect } from 'react-redux';
-import { faPowerOff, faTerminal } from '@fortawesome/free-solid-svg-icons'
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core'
 import React from 'react';
 import styled from 'styled-components';
 
 import {
-    fetchRemote,
-    fetchRemoteByMode,
-    postRemote,
-    saveRemote
+  fetchRemote,
+  fetchRemoteByMode,
+  postRemote
 } from '../../actions/remote';
 import { fetchTemplate } from '../../actions/template';
-import { getRemoteState } from '../../actions/state';
+import { getRemoteState, saveRemoteState } from '../../actions/state';
 import Range from './Range';
 import Shot from './Shot';
 import Step from './Step';
@@ -29,8 +29,8 @@ const mapDispatchToProps = (dispatch, props) => ({
     getRemoteState() {
         dispatch(getRemoteState(dispatch))
     },
-    saveRemote(entry) {
-        dispatch(saveRemote(dispatch, entry))
+    saveRemoteState(entry) {
+        dispatch(saveRemoteState(dispatch, entry))
     },
     getRemote() {
         dispatch(fetchRemote(dispatch))
@@ -49,82 +49,82 @@ const mapDispatchToProps = (dispatch, props) => ({
 class RemoteCard extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            stashed: false
-        }
         this.props.loadTemplate()
         this.props.getRemoteState()
-        this.props.getRemote()
+        library.add(fas)
     }
 
-    // Propsから複製して、編集した奴をDispatchすれば良いのでは？
+    // Convert RemoteData to State
+    dataToState(entry) {
+        let state = {...this.props.remoteState};
 
-    componentDidMount() {
-        console.log('didmount')
-        console.log(this.state)
-        console.log(this.props)
+        // Must be deep-copy children nodes
+        state = {
+            operation: entry.operation,
+            mode: entry.mode,
+            mode_data: {...state.mode_data}
+        }
+
+        state.mode_data[entry.mode] = {
+            temp: entry.temp,
+            fan: entry.fan,
+            horizontal_vane: entry.horizontal_vane,
+            vertical_vane: entry.vertical_vane
+        }
+
+        return state;
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        console.log('didupdate')
-        console.log(this.state)
-        console.log(this.props)
-    }
-
-    saveState(entry) {
-        this.props.saveRemote(entry);
-        this.setState({
-            stashed: true
-        });
+    // Convert State to Remote
+    stateToData(m) {
+        // m: mode
+        const remoteState = {...this.props.remoteState};
+        const operation = remoteState['operation'];
+        const mode = m ? m : remoteState['mode'];
+        return {
+            operation: operation,
+            mode: mode,
+            ...remoteState['mode_data'][mode],
+        }
     }
 
     render() {
-        //fetchTemplate().then(r =>
-        //    console.log(r)
-        //)
-
-        console.log("Rendering...")
-        console.log(this.state)
-        console.log(this.props)
-
         //const remote = {...this.state.remote};
-        if (!this.props.remote || !this.props.template) {
+        if (!this.props.remoteState || !this.props.template) {
             return (
                 <div>
-                    <Spinner animation="border" />
-                    <span style={{fontSize: "2em"}}> Loading...</span>
+                    <Navbar variant="light">
+                        <Navbar.Brand>
+                            <FontAwesomeIcon spin icon={["fa", "asterisk"]} />
+                            <span style={{margin: "0.5em"}}>{'LOADING...'}</span>
+                        </Navbar.Brand>
+                    </Navbar>
                 </div>
             )
         }
-        //const remote = {
-        //    operation: this.props.remoteState['operation'],
-        //    mode: this.props.remoteState['mode'],
-        //    ...this.props.remoteState['mode_data'][this.props.remoteState['mode']],
-        //}
-        const remote = {...this.props.remote};
 
-        const remoteState = {...this.props.remoteState};
+        const remote = this.stateToData();
 
         return (
             <div>
                 <Navbar variant="light">
                     <Navbar.Brand>
-                        <FontAwesomeIcon icon={faTerminal} />
+                        <FontAwesomeIcon icon={["fas", "terminal"]} />
                         <span style={{margin: "0.5em"}}>{'Debug //'}</span>
                     </Navbar.Brand>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Button
-                            status={"N/A"}
-                            onClick={
-                                () => {
-                                    this.props.loadTemplate()
-                                    this.props.getRemote()
-                                }
-                            }
-                            icon={<FontAwesomeIcon icon={faPowerOff} />}
+                            onClick={() => {
+                                    this.props.getRemoteState()
+                                }}
                         >Sync</Button>
-
-                        {<Button>Send</Button>}
+                        {true ?
+                        <Button
+                            onClick={() => {
+                                this.props.pushRemote(remote);
+                            }}>Send</Button> :
+                        <p></p>
+                        }
                     </Navbar.Collapse>
                 </Navbar>
                 <CardBase>
@@ -134,12 +134,11 @@ class RemoteCard extends React.Component {
                             status={remote.operation ? "ON" : "OFF"}
                             onClick={() => {
                                 remote.operation = !remote.operation;
-                                //this.props.saveRemote(remote)
-                                this.saveState(remote)
+                                this.props.saveRemoteState(this.dataToState(remote));
                                 this.props.pushRemote(remote)
 
                             }}
-                                icon={<FontAwesomeIcon icon={faPowerOff} />}
+                                icon={<FontAwesomeIcon icon={["fas", "power-off"]} />}
                             />
 
                             {remote.temp ?
@@ -151,12 +150,14 @@ class RemoteCard extends React.Component {
                                 status={remote.temp ? remote.temp : "--"}
                                 onIncrement={() => {
                                     remote.temp = remote.temp + 1;
+                                    this.props.saveRemoteState(this.dataToState(remote));
                                     this.props.pushRemote(remote)
                                 }}
-                                    onDecrement={() => {
-                                        remote.temp = remote.temp - 1;
-                                        this.props.pushRemote(remote)
-                                    }}
+                                onDecrement={() => {
+                                    remote.temp = remote.temp - 1;
+                                    this.props.saveRemoteState(this.dataToState(remote));
+                                    this.props.pushRemote(remote)
+                                }}
                                 />: <p></p>
                             }
                         </Row>
@@ -168,16 +169,12 @@ class RemoteCard extends React.Component {
                                 contents={["cool", "dry", "heat"]}
                                 onClick={(key) => {
                                     if (["cool", "dry", "heat"].includes(key)) {
-                                        //this.props.getRemoteByMode(key)
-                                        const newRemote = {
-                                            operation: remote.operation,
-                                            mode: key,
-                                            ...remoteState['mode_data'][key],
-                                        }
-                                        console.log('change mode')
-                                        console.log(newRemote)
-                                        this.props.saveRemote(newRemote)
-                                        this.props.pushRemote(newRemote)
+                                        this.props.saveRemoteState(this.dataToState(remote));
+
+                                        // Get RemoteData from local State
+                                        const r = this.stateToData(key);
+                                        this.props.saveRemoteState(this.dataToState(r));
+                                        this.props.pushRemote(r)
                                     }
                                 }}
                             />
@@ -186,7 +183,9 @@ class RemoteCard extends React.Component {
                                 status={remote.fan}
                                 contents={this.props.template[remote.mode].fan.step}
                                 onClick={(key) => {
-                                    remote.Fan = key
+                                    console.log('fan')
+                                    remote.fan = key
+                                    this.props.saveRemoteState(this.dataToState(remote));
                                     this.props.pushRemote(remote)
                                 }}
                             />
@@ -199,6 +198,7 @@ class RemoteCard extends React.Component {
                                 contents={this.props.template[remote.mode].vertical_vane.step}
                                 onClick={(key) => {
                                     remote.vertical_vane = key
+                                    this.props.saveRemoteState(this.dataToState(remote));
                                     this.props.pushRemote(remote)
                                 }}
                             />
@@ -208,6 +208,7 @@ class RemoteCard extends React.Component {
                                 contents="Toggle"
                                 onClick={(key) => {
                                     remote.horizontal_vane = key
+                                    this.props.saveRemoteState(this.dataToState(remote));
                                     this.props.pushRemote(remote)
                                 }}
                             />

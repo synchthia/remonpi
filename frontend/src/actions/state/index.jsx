@@ -20,3 +20,11 @@ export function getRemoteState(dispatch) {
         payload: request
     }
 }
+
+export function saveRemoteState(dispatch, payload) {
+    dispatch(getRemoteStateSuccess(payload))
+    return {
+        type: 'SAVE_REMOTE_STATE',
+        payload: payload
+    }
+}
