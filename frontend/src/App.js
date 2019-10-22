@@ -9,7 +9,6 @@ import Navigation from './components/basement/Navbar';
 import RemoteCard from './components/remote/RemoteCard';
 import store from './store';
 
-
 const App = () => {
     return (
         <Provider store={store}>
