@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/synchthia/remonpi/controller/mitsubishi/kgsa3c"
 	"github.com/synchthia/remonpi/logger"
@@ -41,10 +42,8 @@ func NewHTTPServer(remote *remote.Remote) *gin.Engine {
 	// Template
 	r.GET("/api/v1/template", h.getTemplate)
 
-	//r.Static("/", "public/index.html")
-	//r.LoadHTMLFiles("public/*")
-	r.StaticFile("/", "public/index.html")
-	r.Static("/assets", "public/assets")
+	r.Use(static.Serve("/", static.LocalFile("./public", false)))
+
 	return r
 }
 
