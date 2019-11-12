@@ -6,7 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/synchthia/remonpi/controller"
 	"github.com/synchthia/remonpi/models"
-	"github.com/synchthia/remonpi/sender"
+	"github.com/synchthia/remonpi/sender/hexpi"
 	"github.com/synchthia/remonpi/util"
 )
 
@@ -89,23 +89,11 @@ func (c *remoteController) Send(d *models.RemoteData) error {
 		return err
 	}
 
-	// TODO: Send
 	code := util.SignalToCode(430, signal, 13300)
-	logrus.Println("Emitted")
-	if err := sender.Send(code); err != nil {
+	logrus.Debugln("Emitted")
+	if err := hexpi.SendIR(code); err != nil {
 		return err
 	}
-	//	fmt.Println(code)
-
-	//rsig := [][]int{}
-	//for i := 0; i < len(code); i += 2 {
-	//	//fmt.Printf("[%d, %d]", i, i+1)
-	//	if i < len(code)-1 {
-	//		rsig = append(rsig, []int{code[i], code[i+1]})
-	//	}
-	//}
-
-	//util.CodeToAEHA(rsig)
 
 	return nil
 }
