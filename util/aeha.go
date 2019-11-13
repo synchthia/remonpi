@@ -7,6 +7,7 @@ func CodeToAEHA(entries [][]int) {
 	offset := -1
 	byt := 0
 
+	result := [][]int{[]int{}}
 	for i := range entries {
 		on := entries[i][0]
 		off := entries[i][1]
@@ -16,7 +17,8 @@ func CodeToAEHA(entries [][]int) {
 
 		if on > 1500 {
 			if offset >= 0 {
-				fmt.Printf("\n")
+				fmt.Printf("|\n")
+				result = append(result, []int{})
 			}
 			offset = 0
 			byt = 0
@@ -25,16 +27,29 @@ func CodeToAEHA(entries [][]int) {
 			if off > on*2 {
 				r = 1
 			}
-			byt |= (r) << offset
+
+			//fmt.Printf("[%d] ", offset)
+			byt |= r << offset
+			//fmt.Printf("[%02X] ", byt)
 			offset = offset + 1
 
-			if (offset & 7) == 0 {
+			if offset == 8 {
 				fmt.Printf("%02X ", byt)
+				result[len(result)-1] = append(result[len(result)-1], byt)
 				offset = 0
 				byt = 0
 			}
 		}
 	}
+	fmt.Printf("\n")
+
+	for _, arr := range result {
+		for _, val := range arr {
+			fmt.Printf("%02X ", val)
+		}
+		fmt.Println()
+	}
+
 }
 
 // SignalToCode - Hex code to IR Code
