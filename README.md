@@ -2,6 +2,8 @@ RemonPi
 =========================================
 
 ## Requirements
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsynchthia%2Fremonpi.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsynchthia%2Fremonpi?ref=badge_shield)
+
 > Remon Pi required HexPi for Send IR Signal, etc.
 > https://github.com/synchthia/hexpi
 
@@ -22,3 +24,7 @@ RemonPi
 
 ### HEXPI_ADDRESS
 * HexPi Endpoint Address (ex, `http://localhost:8081`)
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsynchthia%2Fremonpi.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsynchthia%2Fremonpi?ref=badge_large)
