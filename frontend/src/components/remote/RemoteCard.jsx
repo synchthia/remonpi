@@ -110,7 +110,7 @@ class RemoteCard extends React.Component {
                 <Navbar variant="light">
                     <Navbar.Brand>
                         <FontAwesomeIcon icon={["fas", "terminal"]} />
-                        <span style={{margin: "0.5em"}}>{'Debug //'}</span>
+                        <span style={{margin: "0.5em"}}>{'Control'}</span>
                     </Navbar.Brand>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Button
