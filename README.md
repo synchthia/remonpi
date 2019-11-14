@@ -1,8 +1,10 @@
 RemonPi
 =========================================
 
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsynchthia%2Fremonpi.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsynchthia%2Fremonpi?ref=badge_shield)
+
 ## Requirements
-> Remon Pi required HexPi for Send IR Signal, etc.
+> Remon Pi required HexPi for Send IR Signal, etc.  \
 > https://github.com/synchthia/hexpi
 
 ## Environment Variables
