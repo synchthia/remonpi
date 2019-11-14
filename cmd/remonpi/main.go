@@ -10,6 +10,7 @@ import (
 )
 
 func startHTTPServer(port string, remote *remote.Remote) error {
+	logrus.Infof("[HTTP] HTTP Listening on %s...", port)
 	return server.NewHTTPServer(remote).Run(":" + port)
 }
 
