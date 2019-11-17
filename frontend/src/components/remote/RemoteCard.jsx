@@ -194,25 +194,25 @@ class RemoteCard extends React.Component {
                         </Row>
                         <hr />
                         <Row>
-                            {remote.vertical_vane ?
+                            {remote.horizontal_vane ?
                             <Step
-                                name="Vertical Vane"
-                                status={remote.vertical_vane}
-                                contents={this.props.template[remote.mode].vertical_vane.step}
+                                name="Horizontal Vane"
+                                status={remote.horizontal_vane}
+                                contents={this.props.template[remote.mode].horizontal_vane.step}
                                 onClick={(key) => {
-                                    remote.vertical_vane = key
+                                    remote.horizontal_vane = key
                                     this.props.saveRemoteState(this.dataToState(remote));
                                     this.props.pushRemote(remote)
                                 }}
                             /> : <p></p>
                             }
-                            {remote.horizontal_vane ?
+                            {remote.vertical_vane ?
                             <Shot
-                                name="Horizontal Vane"
-                                status={remote.horizontal_vane}
+                                name="Vertical Vane"
+                                status={remote.vertical_vane}
                                 contents="Toggle"
                                 onClick={(key) => {
-                                    remote.horizontal_vane = key
+                                    remote.vertical_vane = key
                                     this.props.saveRemoteState(this.dataToState(remote));
                                     this.props.pushRemote(remote)
                                 }}

@@ -52,20 +52,20 @@ func (c *remoteController) Set(d *models.RemoteData) error {
 		data.Fan = d.Fan
 	}
 
-	// VerticalVane
-	if template.GetByMode(d.Mode).VerticalVane != nil {
-		if err := template.GetByMode(d.Mode).VerticalVane.Validate(d.VerticalVane); err != nil {
-			return err
-		}
-		data.VerticalVane = d.VerticalVane
-	}
-
 	// HorizontalVane
 	if template.GetByMode(d.Mode).HorizontalVane != nil {
 		if err := template.GetByMode(d.Mode).HorizontalVane.Validate(d.HorizontalVane); err != nil {
 			return err
 		}
 		data.HorizontalVane = d.HorizontalVane
+	}
+
+	// VerticalVane
+	if template.GetByMode(d.Mode).VerticalVane != nil {
+		if err := template.GetByMode(d.Mode).VerticalVane.Validate(d.VerticalVane); err != nil {
+			return err
+		}
+		data.VerticalVane = d.VerticalVane
 	}
 
 	if err := c.Send(data); err != nil {
@@ -150,30 +150,30 @@ func (c *remoteController) Generate(d *models.RemoteData) ([][]int, error) {
 		return nil, errors.New("invalid fan parameters")
 	}
 
-	// Vertical Vane
-	if d.VerticalVane == "auto" {
+	// Horizontal Vane
+	if d.HorizontalVane == "auto" {
 		signal[0][8] += 0x00
-	} else if d.VerticalVane == "1" {
+	} else if d.HorizontalVane == "1" {
 		signal[0][8] += 0x08
-	} else if d.VerticalVane == "2" {
+	} else if d.HorizontalVane == "2" {
 		signal[0][8] += 0x10
-	} else if d.VerticalVane == "3" {
+	} else if d.HorizontalVane == "3" {
 		signal[0][8] += 0x18
-	} else if d.VerticalVane == "4" {
+	} else if d.HorizontalVane == "4" {
 		signal[0][8] += 0x20
-	} else if d.VerticalVane == "5" {
+	} else if d.HorizontalVane == "5" {
 		signal[0][8] += 0x28
 	} else {
-		return nil, errors.New("invalid vertical_vane parameters")
+		return nil, errors.New("invalid horizontal_vane parameters")
 	}
 
-	// Horizontal Vane
-	if d.HorizontalVane == "keep" {
+	// Vertical Vane
+	if d.VerticalVane == "keep" {
 		signal[0][11] = 0x00
-	} else if d.HorizontalVane == "swing" {
+	} else if d.VerticalVane == "swing" {
 		signal[0][11] = 0x04
 	} else {
-		return nil, errors.New("invalid horizontal_vane parameters")
+		return nil, errors.New("invalid vertical_Vane parameters")
 	}
 
 	// Sum (Parity)

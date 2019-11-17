@@ -15,8 +15,8 @@ type Template struct {
 type ModeTemplate struct {
 	Temp           *template.Value `json:"temp"`
 	Fan            *template.Value `json:"fan"`
-	VerticalVane   *template.Value `json:"vertical_vane"`
 	HorizontalVane *template.Value `json:"horizontal_vane"`
+	VerticalVane   *template.Value `json:"vertical_vane"`
 }
 
 // GetByMode - Get Value by Mode
@@ -59,7 +59,7 @@ var (
 					"high",
 				},
 			},
-			VerticalVane: &template.Value{
+			HorizontalVane: &template.Value{
 				Type:    "STEP",
 				Default: "auto",
 				Step: []string{
@@ -71,7 +71,7 @@ var (
 					"5",
 				},
 			},
-			HorizontalVane: &template.Value{
+			VerticalVane: &template.Value{
 				Type:    "BUTTON",
 				Default: "keep",
 				Button: []string{
@@ -88,7 +88,7 @@ var (
 					"auto",
 				},
 			},
-			VerticalVane: &template.Value{
+			HorizontalVane: &template.Value{
 				Type:    "STEP",
 				Default: "auto",
 				Step: []string{
@@ -100,7 +100,7 @@ var (
 					"5",
 				},
 			},
-			HorizontalVane: &template.Value{
+			VerticalVane: &template.Value{
 				Type:    "BUTTON",
 				Default: "keep",
 				Button: []string{
@@ -129,7 +129,7 @@ var (
 					"high",
 				},
 			},
-			VerticalVane: &template.Value{
+			HorizontalVane: &template.Value{
 				Type:    "STEP",
 				Default: "auto",
 				Step: []string{
@@ -141,7 +141,7 @@ var (
 					"5",
 				},
 			},
-			HorizontalVane: &template.Value{
+			VerticalVane: &template.Value{
 				Type:    "BUTTON",
 				Default: "keep",
 				Button: []string{
