@@ -1,21 +1,38 @@
-clean:
-	@rm -rfv ./build
-	@rm -rfv ./server/statik.go
-
+#
+# Frontend
+#
 clean_frontend:
 	@rm -rfv ./frontend/build
 	@rm -rfv ./public
 
 frontend: clean_frontend
-	@cd ./frontend; \
+	@cd ./frontend && \
 	npm install && \
 	npm run build && \
 	cp -rv build ../public
+
+#
+# Backend
+#
+clean:
+	@rm -rfv ./build
+	@rm -rfv ./server/statik.go
+
+statik:
+	@echo ":: Generate bindata from statik..."
 	@go get -u -v github.com/rakyll/statik
 	@statik -f -src ./public -p server
 
-build: frontend
-	@mkdir -p build
-	@go build -v -o build/remonpi \
+build: build_linux_amd64 build_linux_arm64v6
+build_linux_amd64: clean statik
+	@mkdir -p ./build/linux_amd64
+	@GOOS=linux GOARCH=amd64 \
+		go build -v -o build/linux_amd64/remonpi \
+		./cmd/remonpi/main.go
+
+build_linux_arm64v6: clean statik
+	@mkdir -p ./build/linux_arm64v6
+	@GOOS=linux GOARCH=arm GOARM=6 \
+		go build -v -o build/linux_arm64v6/remonpi \
 		./cmd/remonpi/main.go
 
