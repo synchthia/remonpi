@@ -6,6 +6,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/rakyll/statik/fs"
+	"github.com/sirupsen/logrus"
 	"github.com/synchthia/remonpi/controller/mitsubishi/kgsa3c"
 	"github.com/synchthia/remonpi/logger"
 	"github.com/synchthia/remonpi/models"
@@ -14,6 +16,21 @@ import (
 
 type httpServer struct {
 	Remote *remote.Remote
+}
+
+type statikFileSystem struct {
+	fs http.FileSystem
+}
+
+func (b *statikFileSystem) Open(name string) (http.File, error) {
+	return b.fs.Open(name)
+}
+
+func (b *statikFileSystem) Exists(prefix string, filepath string) bool {
+	if _, err := b.fs.Open(filepath); err != nil {
+		return false
+	}
+	return true
 }
 
 // NewHTTPServer - Start HTTP Server
@@ -42,7 +59,16 @@ func NewHTTPServer(remote *remote.Remote) *gin.Engine {
 	// Template
 	r.GET("/api/v1/template", h.getTemplate)
 
-	r.Use(static.Serve("/", static.LocalFile("./public", false)))
+	statikFS, err := fs.New()
+	if err != nil {
+		logrus.WithError(err).Fatal("[Static]")
+	}
+
+	r.Use(static.Serve("/", &statikFileSystem{
+		statikFS,
+	}))
+
+	// LocalFile : r.Use(static.Serve("/", static.LocalFile("./public", false)))
 
 	return r
 }
