@@ -166,9 +166,9 @@ class RemoteCard extends React.Component {
                             <Step
                                 name="Mode"
                                 status={remote.mode}
-                                contents={["cool", "dry", "heat"]}
+                                contents={Object.keys(this.props.template)}
                                 onClick={(key) => {
-                                    if (["cool", "dry", "heat"].includes(key)) {
+                                    if (Object.keys(this.props.template).includes(key)) {
                                         this.props.saveRemoteState(this.dataToState(remote));
 
                                         // Get RemoteData from local State
