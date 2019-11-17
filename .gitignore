@@ -2,6 +2,7 @@
 /local
 /public
 /server/statik.go
+/build
 
 # Created by https://www.gitignore.io/api/go,web,vim,node,react,linux,macos,windows,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=go,web,vim,node,react,linux,macos,windows,visualstudiocode

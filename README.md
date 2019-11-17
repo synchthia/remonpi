@@ -7,6 +7,12 @@ RemonPi
 > Remon Pi required HexPi for Send IR Signal, etc.  \
 > https://github.com/synchthia/hexpi
 
+## How to build
+```bash
+# Build frontend & build
+make clean frontend build
+```
+
 ## Environment Variables
 ### HTTP_PORT
 * Listening HTTP Port (default: 8080)
