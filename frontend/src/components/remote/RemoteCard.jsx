@@ -122,7 +122,7 @@ class RemoteCard extends React.Component {
                         <Button
                             onClick={() => {
                                 this.props.pushRemote(remote);
-                            }}>Send</Button> :
+                            }}>Re-Send</Button> :
                         <p></p>
                         }
                     </Navbar.Collapse>
