@@ -11,10 +11,12 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// IRCode - IR Signal Code
 type IRCode struct {
 	Code []int `json:"code"`
 }
 
+// SendIR - Send IR Code
 func SendIR(code []int) error {
 	url := os.Getenv("HEXPI_ADDRESS")
 	if len(url) == 0 {

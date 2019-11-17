@@ -10,7 +10,7 @@ import (
 	"github.com/synchthia/remonpi/models"
 )
 
-// Database
+// Database - Controller Database
 type Database struct {
 	Vendor   string
 	Model    string
@@ -57,6 +57,7 @@ func NewDatabase(vendor, model, path string) *Database {
 	return d
 }
 
+// Load - load from database
 func (d *Database) Load() error {
 	b, err := ioutil.ReadFile(d.FilePath)
 	if err != nil {
@@ -70,6 +71,7 @@ func (d *Database) Load() error {
 	return nil
 }
 
+// Save - Save to Database
 func (d *Database) Save() error {
 	b, err := json.Marshal(d.State)
 	if err != nil {
@@ -84,10 +86,12 @@ func (d *Database) Save() error {
 	return nil
 }
 
+// GetState - Get current State
 func (d *Database) GetState() *models.State {
 	return d.State
 }
 
+// UpdateState - Update state from RemoteData
 func (d *Database) UpdateState(r *models.RemoteData) error {
 	state := d.State
 	state.Operation = r.Operation
@@ -133,8 +137,4 @@ func generateState() *models.State {
 	}
 
 	return s
-}
-
-func (d *Database) Test() {
-	fmt.Println("test")
 }

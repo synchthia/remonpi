@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// Validate - Validate values in Type
 func (v *Value) Validate(target interface{}) error {
 	switch v.Type {
 	case "RANGE":

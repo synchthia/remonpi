@@ -2,12 +2,14 @@ package controller
 
 import "github.com/synchthia/remonpi/models"
 
+// Controller - Interface of Controller
 type Controller interface {
 	Set(*models.RemoteData) error
 	Send(*models.RemoteData) error
 	Generate(*models.RemoteData) ([][]int, error)
 }
 
+// Database - Individual controller database
 type Database interface {
 	//Load()
 	GetState() *models.State

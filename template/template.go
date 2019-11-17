@@ -17,6 +17,7 @@ type Value struct {
 	Button  []string    `json:"button,omitempty"`
 }
 
+// Range - Numeric range definition
 type Range struct {
 	Step float32 `json:"step"`
 	From float32 `json:"from"`
