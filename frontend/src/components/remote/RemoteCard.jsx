@@ -122,7 +122,7 @@ class RemoteCard extends React.Component {
                         <Button
                             onClick={() => {
                                 this.props.pushRemote(remote);
-                            }}>Send</Button> :
+                            }}>Re-Send</Button> :
                         <p></p>
                         }
                     </Navbar.Collapse>
@@ -158,7 +158,7 @@ class RemoteCard extends React.Component {
                                     this.props.saveRemoteState(this.dataToState(remote));
                                     this.props.pushRemote(remote)
                                 }}
-                                />: <p></p>
+                                /> : <p></p>
                             }
                         </Row>
                         <hr />
@@ -166,9 +166,9 @@ class RemoteCard extends React.Component {
                             <Step
                                 name="Mode"
                                 status={remote.mode}
-                                contents={["cool", "dry", "heat"]}
+                                contents={Object.keys(this.props.template)}
                                 onClick={(key) => {
-                                    if (["cool", "dry", "heat"].includes(key)) {
+                                    if (Object.keys(this.props.template).includes(key)) {
                                         this.props.saveRemoteState(this.dataToState(remote));
 
                                         // Get RemoteData from local State
@@ -178,20 +178,23 @@ class RemoteCard extends React.Component {
                                     }
                                 }}
                             />
-                            <Step
-                                name="Fan"
-                                status={remote.fan}
-                                contents={this.props.template[remote.mode].fan.step}
-                                onClick={(key) => {
-                                    console.log('fan')
-                                    remote.fan = key
-                                    this.props.saveRemoteState(this.dataToState(remote));
-                                    this.props.pushRemote(remote)
-                                }}
-                            />
+                            {remote.fan ?
+                                <Step
+                                    name="Fan"
+                                    status={remote.fan}
+                                    contents={this.props.template[remote.mode].fan.step}
+                                    onClick={(key) => {
+                                        console.log('fan')
+                                        remote.fan = key
+                                        this.props.saveRemoteState(this.dataToState(remote));
+                                        this.props.pushRemote(remote)
+                                    }}
+                                /> : <p></p>
+                            }
                         </Row>
                         <hr />
                         <Row>
+                            {remote.vertical_vane ?
                             <Step
                                 name="Vertical Vane"
                                 status={remote.vertical_vane}
@@ -201,7 +204,9 @@ class RemoteCard extends React.Component {
                                     this.props.saveRemoteState(this.dataToState(remote));
                                     this.props.pushRemote(remote)
                                 }}
-                            />
+                            /> : <p></p>
+                            }
+                            {remote.horizontal_vane ?
                             <Shot
                                 name="Horizontal Vane"
                                 status={remote.horizontal_vane}
@@ -211,7 +216,8 @@ class RemoteCard extends React.Component {
                                     this.props.saveRemoteState(this.dataToState(remote));
                                     this.props.pushRemote(remote)
                                 }}
-                            />
+                            /> : <p></p>
+                            }
                         </Row>
                     </CardBase>
                 </div>
