@@ -14,6 +14,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// Config - Log Configuration
 type Config struct {
 	// UTC a boolean stating whether to use UTC time zone or local.
 	UTC            bool

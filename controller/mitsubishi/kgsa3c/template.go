@@ -4,12 +4,14 @@ import (
 	"github.com/synchthia/remonpi/template"
 )
 
+// Template - Remote Template
 type Template struct {
 	Cool *ModeTemplate `json:"cool"`
 	Dry  *ModeTemplate `json:"dry"`
 	Heat *ModeTemplate `json:"heat"`
 }
 
+// ModeTemplate - Template individual Modes
 type ModeTemplate struct {
 	Temp           *template.Value `json:"temp"`
 	Fan            *template.Value `json:"fan"`

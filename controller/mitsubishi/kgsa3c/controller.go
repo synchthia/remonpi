@@ -14,6 +14,7 @@ type remoteController struct {
 	database controller.Database
 }
 
+// EnsureController - Return implemented interface
 func EnsureController(database controller.Database) controller.Controller {
 	return &remoteController{
 		database: database,

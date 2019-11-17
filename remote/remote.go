@@ -1,8 +1,6 @@
 package remote
 
 import (
-	"fmt"
-
 	"github.com/synchthia/remonpi/controller"
 	"github.com/synchthia/remonpi/controller/mitsubishi/kgsa3c"
 	"github.com/synchthia/remonpi/models"
@@ -31,28 +29,17 @@ func NewRemote(vendor string, model string, dbPath string) *Remote {
 	return r
 }
 
+// GetState - Get Current State
 func (r *Remote) GetState() *models.State {
 	d := r.Database.GetState()
-	fmt.Println("getstate...")
 	return d
 }
 
+// Send - Send IR Signal
 func (r *Remote) Send(d *models.RemoteData) error {
 	if err := r.Controller.Set(d); err != nil {
 		return err
 	}
 
-	//if err := r.Controller.Send(d); err != nil {
-	//	return err
-	//}
-
-	//if err := r.Database.UpdateState(d); err != nil {
-	//	return err
-	//}
-
-	//if err := r.Database.Save(); err != nil {
-	//	return err
-	//}
-	//return errors.New("send request was not matched any vendor/model")
 	return nil
 }
