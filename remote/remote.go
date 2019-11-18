@@ -2,6 +2,7 @@ package remote
 
 import (
 	"github.com/synchthia/remonpi/controller"
+	"github.com/synchthia/remonpi/controller/corona/crw"
 	"github.com/synchthia/remonpi/controller/mitsubishi/kgsa3c"
 	"github.com/synchthia/remonpi/models"
 )
@@ -25,6 +26,9 @@ func NewRemote(vendor string, model string, dbPath string) *Remote {
 	if vendor == "mitsubishi" && model == "kgsa3-c" {
 		r.Database = kgsa3c.NewDatabase(vendor, model, dbPath)
 		r.Controller = kgsa3c.EnsureController(r.Database)
+	} else if vendor == "corona" && model == "cr-w" {
+		r.Database = crw.NewDatabase(vendor, model, dbPath)
+		r.Controller = crw.EnsureController(r.Database)
 	}
 	return r
 }
