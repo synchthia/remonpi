@@ -126,11 +126,11 @@ func generateState() *models.State {
 		if v.Fan != nil {
 			modeData.Fan = v.Fan.Default.(string)
 		}
-		if v.VerticalVane != nil {
-			modeData.VerticalVane = v.VerticalVane.Default.(string)
-		}
 		if v.HorizontalVane != nil {
 			modeData.HorizontalVane = v.HorizontalVane.Default.(string)
+		}
+		if v.VerticalVane != nil {
+			modeData.VerticalVane = v.VerticalVane.Default.(string)
 		}
 
 		s.ModeData[m] = modeData

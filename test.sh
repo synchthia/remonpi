@@ -19,7 +19,7 @@ if [ "$1" = "remote" ]; then
             curl \
                 -X POST \
                 -H 'Content-Type: application/json' \
-                -d '{"operation": true, "mode": "cool", "temp": 28, "fan": "high", "vertical_vane": "auto", "horizontal_vane": "keep"}' \
+                -d '{"operation": true, "mode": "cool", "temp": 28, "fan": "high", "horizontal_vane": "auto", "vertical_vane": "keep"}' \
                 http://localhost:8080/api/v1/remote | jq .
             set +x
         fi
@@ -28,7 +28,7 @@ if [ "$1" = "remote" ]; then
             curl \
                 -X POST \
                 -H 'Content-Type: application/json' \
-                -d '{"operation": true, "mode": "cool", "mode_data": {"cool": {"temp": 28, "fan": "auto", "vertical_vane": "auto", "horizontal_vane": "keep"}}}' \
+                -d '{"operation": true, "mode": "cool", "mode_data": {"cool": {"temp": 28, "fan": "auto", "horizontal_vane": "auto", "vertical_vane": "keep"}}}' \
                 http://localhost:8080/api/v1/remote | jq .
             set +x
         fi
@@ -37,7 +37,7 @@ if [ "$1" = "remote" ]; then
             curl \
                 -X POST \
                 -H 'Content-Type: application/json' \
-                -d '{"operation": false, "mode": "cool", "temp": 28, "fan": "auto", "vertical_vane": "auto", "horizontal_vane": "keep"}' \
+                -d '{"operation": false, "mode": "cool", "temp": 28, "fan": "auto", "horizontal_vane": "auto", "vertical_vane": "keep"}' \
                 http://localhost:8080/api/v1/remote | jq .
             set +x
         fi
@@ -46,7 +46,7 @@ if [ "$1" = "remote" ]; then
             curl \
                 -X POST \
                 -H 'Content-Type: application/json' \
-                -d '{"operation": true, "mode": "dry", "fan": "auto", "vertical_vane": "auto", "horizontal_vane": "keep"}' \
+                -d '{"operation": true, "mode": "dry", "fan": "auto", "horizontal_vane": "auto", "vertical_vane": "keep"}' \
                 http://localhost:8080/api/v1/remote | jq .
             set +x
         fi

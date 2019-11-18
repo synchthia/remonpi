@@ -8,8 +8,8 @@ type RemoteData struct {
 	Mode           string  `json:"mode"`
 	Temp           float32 `json:"temp,omitempty"`
 	Fan            string  `json:"fan"`
-	VerticalVane   string  `json:"vertical_vane,omitempty"`
 	HorizontalVane string  `json:"horizontal_vane,omitempty"`
+	VerticalVane   string  `json:"vertical_vane,omitempty"`
 }
 
 // State - Scheme for State management (Database etc.)
@@ -23,8 +23,8 @@ type State struct {
 type ModeData struct {
 	Temp           float32 `json:"temp,omitempty"`
 	Fan            string  `json:"fan"`
-	VerticalVane   string  `json:"vertical_vane,omitempty"`
 	HorizontalVane string  `json:"horizontal_vane,omitempty"`
+	VerticalVane   string  `json:"vertical_vane,omitempty"`
 }
 
 // ToRemoteData - Convert to RemoteData for current mode.
@@ -40,7 +40,7 @@ func (s *State) ToRemoteDataByMode(mode string) *RemoteData {
 		Mode:           mode,
 		Temp:           s.ModeData[mode].Temp,
 		Fan:            s.ModeData[mode].Fan,
-		VerticalVane:   s.ModeData[mode].VerticalVane,
 		HorizontalVane: s.ModeData[mode].HorizontalVane,
+		VerticalVane:   s.ModeData[mode].VerticalVane,
 	}
 }
