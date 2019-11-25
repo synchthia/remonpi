@@ -2,7 +2,6 @@ package crw
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/sirupsen/logrus"
 	"github.com/synchthia/remonpi/controller"
@@ -88,13 +87,6 @@ func (c *remoteController) Set(d *models.RemoteData) error {
 
 // Send - Generate & Send IR Signal
 func (c *remoteController) Send(signal [][]int) error {
-	for _, s := range signal {
-		for _, c := range s {
-			fmt.Printf("%x ", c)
-		}
-		fmt.Println("")
-	}
-
 	code := util.SignalToCode(430, signal, 13300)
 	logrus.Debugln("Emitted")
 	if err := hexpi.SendIR(code); err != nil {
