@@ -6,7 +6,6 @@ import "github.com/synchthia/remonpi/models"
 type Controller interface {
 	Set(*models.RemoteData) error
 	Generate(*models.RemoteData, *models.GenerateOption) ([][]int, error)
-	Send([][]int) error
 }
 
 // Database - Individual controller database

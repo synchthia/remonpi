@@ -3,11 +3,9 @@ package crw
 import (
 	"errors"
 
-	"github.com/sirupsen/logrus"
 	"github.com/synchthia/remonpi/controller"
 	"github.com/synchthia/remonpi/models"
-	"github.com/synchthia/remonpi/sender/hexpi"
-	"github.com/synchthia/remonpi/util"
+	"github.com/synchthia/remonpi/sender"
 )
 
 type remoteController struct {
@@ -59,7 +57,7 @@ func (c *remoteController) Set(d *models.RemoteData) error {
 		return err
 	}
 
-	if err := c.Send(signal); err != nil {
+	if err := sender.Send(signal); err != nil {
 		return err
 	}
 
@@ -70,7 +68,7 @@ func (c *remoteController) Set(d *models.RemoteData) error {
 		return err
 	}
 
-	if err := c.Send(signal); err != nil {
+	if err := sender.Send(signal); err != nil {
 		return err
 	}
 
@@ -79,17 +77,6 @@ func (c *remoteController) Set(d *models.RemoteData) error {
 	}
 
 	if err := c.database.Save(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// Send - Generate & Send IR Signal
-func (c *remoteController) Send(signal [][]int) error {
-	code := util.SignalToCode(430, signal, 13300)
-	logrus.Debugln("Emitted")
-	if err := hexpi.SendIR(code); err != nil {
 		return err
 	}
 
