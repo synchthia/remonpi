@@ -47,7 +47,7 @@ func NewHTTPServer(remote *remote.Remote) *gin.Engine {
 	}))
 	r.Use(logger.SetLogger())
 
-	r.GET("/api/v1/test", h.getTest)
+	r.GET("/healthz", h.getHealthz)
 
 	// State
 	r.GET("/api/v1/state", h.getState)
@@ -73,8 +73,8 @@ func NewHTTPServer(remote *remote.Remote) *gin.Engine {
 	return r
 }
 
-func (h *httpServer) getTest(c *gin.Context) {
-	c.String(http.StatusOK, "Test, 123...")
+func (h *httpServer) getHealthz(c *gin.Context) {
+	c.String(http.StatusOK, "OK")
 }
 
 func (h *httpServer) getState(c *gin.Context) {
