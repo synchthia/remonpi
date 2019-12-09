@@ -98,12 +98,14 @@ func (h *httpServer) postRemote(c *gin.Context) {
 
 	// Inject RemoteData
 	if err := c.BindJSON(&remoteData); err != nil {
+		logrus.WithError(err).Errorf("Failed bind RemoteData")
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	err := h.Remote.Send(remoteData)
 	if err != nil {
+		logrus.WithError(err).Errorf("Failed send signal")
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
