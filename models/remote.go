@@ -12,6 +12,12 @@ type RemoteData struct {
 	VerticalVane   string  `json:"vertical_vane,omitempty"`
 }
 
+// GenerateOption - Optional Data for Remote Controller
+type GenerateOption struct {
+	// MutateOperation - Mutate Operation signal (for corona/cr-w)
+	MutateOperation bool
+}
+
 // State - Scheme for State management (Database etc.)
 type State struct {
 	Operation bool                 `json:"operation"`

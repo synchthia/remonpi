@@ -1,4 +1,4 @@
-package kgsa3c
+package crw
 
 import (
 	"errors"
@@ -50,23 +50,20 @@ func (c *remoteController) Set(d *models.RemoteData) error {
 		data.Fan = d.Fan
 	}
 
-	// HorizontalVane
-	if template.GetByMode(d.Mode).HorizontalVane != nil {
-		if err := template.GetByMode(d.Mode).HorizontalVane.Validate(d.HorizontalVane); err != nil {
-			return err
-		}
-		data.HorizontalVane = d.HorizontalVane
+	signal, err := c.Generate(d, &models.GenerateOption{
+		MutateOperation: false,
+	})
+	if err != nil {
+		return err
 	}
 
-	// VerticalVane
-	if template.GetByMode(d.Mode).VerticalVane != nil {
-		if err := template.GetByMode(d.Mode).VerticalVane.Validate(d.VerticalVane); err != nil {
-			return err
-		}
-		data.VerticalVane = d.VerticalVane
+	if err := sender.Send(signal); err != nil {
+		return err
 	}
 
-	signal, err := c.Generate(d, &models.GenerateOption{})
+	signal, err = c.Generate(d, &models.GenerateOption{
+		MutateOperation: true,
+	})
 	if err != nil {
 		return err
 	}
@@ -91,25 +88,30 @@ func (c *remoteController) Generate(d *models.RemoteData, opt *models.GenerateOp
 	template := TemplateData
 	templateByMode := template.GetByMode(d.Mode)
 
-	signal := [][]int{
-		{0x23, 0xCB, 0x26, 0x01, 0x00, 0x24, 0x03, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
-		{0x23, 0xCB, 0x26, 0x01, 0x00, 0x24, 0x03, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
+	baseSignal := [][]int{
+		{0x28, 0x61, 0x3D, 0x10, 0xEF, 0x94, 0x6B},
+		{0x28, 0x61, 0x6D, 0xFF, 0x00, 0xFF, 0x00},
+		{0x28, 0x61, 0xCD, 0xFF, 0x00, 0xFF, 0x00},
 	}
+
+	signal := baseSignal
 
 	// Operation
 	if d.Operation {
-		signal[0][5] = 0x24
+		if opt.MutateOperation {
+			signal[0][5] = 0x20 // Only Action
+		}
 	} else {
-		signal[0][5] = 0x20
+		signal[0][5] = 0x10
 	}
 
 	// Mode
 	if d.Mode == "cool" {
-		signal[0][6] = 0x03
+		signal[0][5] += 0x90
 	} else if d.Mode == "dry" {
-		signal[0][6] = 0x02
-	} else if d.Mode == "heat" {
-		signal[0][6] = 0x01
+		signal[0][5] += 0x02
+	} else if d.Mode == "fan" {
+		signal[0][5] += 0x01
 	} else {
 		return nil, errors.New("invalid mode provided")
 	}
@@ -117,50 +119,23 @@ func (c *remoteController) Generate(d *models.RemoteData, opt *models.GenerateOp
 	// Temp
 	if templateByMode.Temp != nil {
 		if d.Temp >= templateByMode.Temp.Range.From && d.Temp <= templateByMode.Temp.Range.To {
-			signal[0][7] = int(templateByMode.Temp.Range.To - d.Temp)
+			signal[0][5] += int(d.Temp - templateByMode.Temp.Range.From)
 		} else {
 			return nil, errors.New("invalid temp provided")
 		}
 	}
-	signal[0][8] = 0x00
 
 	// Fan
 	if d.Fan == "auto" {
-		signal[0][8] += 0x00
+		signal[0][3] = 0x10
 	} else if d.Fan == "low" {
-		signal[0][8] += 0x02
+		signal[0][3] = 0x11
 	} else if d.Fan == "mid" {
-		signal[0][8] += 0x03
+		signal[0][3] = 0x12
 	} else if d.Fan == "high" {
-		signal[0][8] += 0x05
+		signal[0][3] = 0x13
 	} else {
 		return nil, errors.New("invalid fan parameters")
-	}
-
-	// Horizontal Vane
-	if d.HorizontalVane == "auto" {
-		signal[0][8] += 0x00
-	} else if d.HorizontalVane == "1" {
-		signal[0][8] += 0x08
-	} else if d.HorizontalVane == "2" {
-		signal[0][8] += 0x10
-	} else if d.HorizontalVane == "3" {
-		signal[0][8] += 0x18
-	} else if d.HorizontalVane == "4" {
-		signal[0][8] += 0x20
-	} else if d.HorizontalVane == "5" {
-		signal[0][8] += 0x28
-	} else {
-		return nil, errors.New("invalid horizontal_vane parameters")
-	}
-
-	// Vertical Vane
-	if d.VerticalVane == "keep" {
-		signal[0][11] = 0x00
-	} else if d.VerticalVane == "swing" {
-		signal[0][11] = 0x04
-	} else {
-		return nil, errors.New("invalid vertical_Vane parameters")
 	}
 
 	// Sum (Parity)
@@ -168,7 +143,13 @@ func (c *remoteController) Generate(d *models.RemoteData, opt *models.GenerateOp
 	for _, c := range signal[0] {
 		sum += c
 	}
-	signal[0][len(signal[0])-1] = sum
+
+	baseSignalSum := 0
+	for _, c := range baseSignal[0] {
+		baseSignalSum += c
+	}
+
+	signal[0][len(signal[0])-1] = sum + (sum - baseSignalSum)
 
 	return signal, nil
 }
