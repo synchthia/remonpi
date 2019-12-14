@@ -2,7 +2,7 @@ import { Button } from 'react-bootstrap';
 import React from 'react';
 import styled from 'styled-components';
 
-class Shot extends React.Component {
+class Btn extends React.Component {
     render() {
         return (
             <ColBase className="col-sm">
@@ -24,4 +24,4 @@ const ColBase = styled.div`
     margin: 12px;
 `;
 
-export default Shot;
+export default Btn;

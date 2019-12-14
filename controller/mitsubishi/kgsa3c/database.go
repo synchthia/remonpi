@@ -101,7 +101,9 @@ func (d *Database) UpdateState(r *models.RemoteData) error {
 	}
 	state.ModeData[state.Mode].Fan = r.Fan
 	state.ModeData[state.Mode].HorizontalVane = r.HorizontalVane
-	state.ModeData[state.Mode].VerticalVane = r.VerticalVane
+
+	// Disabled: this option only use for send. KEEP DEFAULT VALUE.
+	//state.ModeData[state.Mode].VerticalVane = r.VerticalVane
 	return nil
 }
 
@@ -112,28 +114,22 @@ func generateState() *models.State {
 		Mode:      "cool",
 		ModeData:  make(map[string]*models.ModeData),
 	}
-	for _, m := range ModeList {
-		//d, err := json.Marshal(v)
-		//if err != nil {
-		//	panic(err)
-		//}
-		//fmt.Printf("%s, %s\n", k, d)
+	for mode, data := range template {
 		modeData := &models.ModeData{}
-		v := template.GetByMode(m)
-		if v.Temp != nil {
-			modeData.Temp = v.Temp.Default.(float32)
+		if data.Temp != nil {
+			modeData.Temp = data.Temp.Default.(float32)
 		}
-		if v.Fan != nil {
-			modeData.Fan = v.Fan.Default.(string)
+		if data.Fan != nil {
+			modeData.Fan = data.Fan.Default.(string)
 		}
-		if v.HorizontalVane != nil {
-			modeData.HorizontalVane = v.HorizontalVane.Default.(string)
+		if data.HorizontalVane != nil {
+			modeData.HorizontalVane = data.HorizontalVane.Default.(string)
 		}
-		if v.VerticalVane != nil {
-			modeData.VerticalVane = v.VerticalVane.Default.(string)
+		if data.VerticalVane != nil {
+			modeData.VerticalVane = data.VerticalVane.Default.(string)
 		}
 
-		s.ModeData[m] = modeData
+		s.ModeData[mode] = modeData
 	}
 
 	return s

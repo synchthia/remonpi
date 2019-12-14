@@ -149,12 +149,12 @@ class RemoteCard extends React.Component {
                                 rangeTo={this.props.template[remote.mode].temp.range.to}
                                 status={remote.temp ? remote.temp : "--"}
                                 onIncrement={() => {
-                                    remote.temp = remote.temp + 1;
+                                    remote.temp = remote.temp + this.props.template[remote.mode].temp.range.step;
                                     this.props.saveRemoteState(this.dataToState(remote));
                                     this.props.pushRemote(remote)
                                 }}
                                 onDecrement={() => {
-                                    remote.temp = remote.temp - 1;
+                                    remote.temp = remote.temp - this.props.template[remote.mode].temp.range.step;
                                     this.props.saveRemoteState(this.dataToState(remote));
                                     this.props.pushRemote(remote)
                                 }}
