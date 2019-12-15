@@ -7,9 +7,6 @@ type Value struct {
 	// Default - default values
 	Default interface{} `json:"default,omitempty"`
 
-	// NoSave - No save to database
-	NoSave bool `json:"nosave,omitempty"`
-
 	// Range - numeric range
 	Range *Range `json:"range,omitempty"`
 
