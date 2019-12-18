@@ -20,8 +20,14 @@ import Toggle from './Toggle';
 
 const mapStateToProps = state => {
     return {
-        remote: state.remote.payload,
-        remoteState: state.remoteState.payload,
+        remote: {
+            data: state.remote.payload,
+            error: state.remote.error
+        },
+        remoteState: {
+            data: state.remoteState.payload,
+            error: state.remoteState.error
+        },
         template: state.template.payload
     }
 };
@@ -56,7 +62,7 @@ class RemoteCard extends React.Component {
 
     // Convert RemoteData to State
     dataToState(entry) {
-        let state = {...this.props.remoteState};
+        let state = {...this.props.remoteState.data};
 
         // Must be deep-copy children nodes
         state = {
@@ -78,7 +84,7 @@ class RemoteCard extends React.Component {
     // Convert State to Remote
     stateToData(m) {
         // m: mode
-        const remoteState = {...this.props.remoteState};
+        const remoteState = {...this.props.remoteState.data};
         const operation = remoteState['operation'];
         const mode = m ? m : remoteState['mode'];
         return {
@@ -90,7 +96,7 @@ class RemoteCard extends React.Component {
 
     render() {
         //const remote = {...this.state.remote};
-        if (!this.props.remoteState || !this.props.template) {
+        if (!this.props.remoteState.data || !this.props.template) {
             return (
                 <div>
                     <Navbar variant="light">
@@ -104,6 +110,9 @@ class RemoteCard extends React.Component {
         }
 
         const remote = this.stateToData();
+
+        console.log(this.props.remote.error)
+        console.log(this.props.remoteState.error)
 
         return (
             <div>

@@ -8,13 +8,20 @@ export function fetchRemoteSuccess(payload) {
     }
 }
 
+export function fetchRemoteError(error) {
+    return {
+        type: 'FETCH_REMOTE_FAILED',
+        payload: {error},
+    }
+}
+
 export function fetchRemote(dispatch) {
     const request = httpClient({
         method: 'GET',
         url: `${API_URL}/api/v1/remote`,
     })
         .then(response => dispatch(fetchRemoteSuccess(response.data)))
-        .catch(error => error.response);
+        .catch(error => dispatch(fetchRemoteError(error.response)));
     return {
         type: 'FETCH_REMOTE',
         payload: request
@@ -30,7 +37,7 @@ export function fetchRemoteByMode(dispatch, mode) {
         }
     })
         .then(response => dispatch(fetchRemoteSuccess(response.data)))
-        .catch(error => error.response);
+        .catch(error => dispatch(fetchRemoteError(error.response)));
     return {
         type: 'FETCH_REMOTE',
         payload: request
@@ -52,6 +59,14 @@ export function postRemoteSuccess(payload) {
     }
 }
 
+export function postRemoteError(error) {
+    console.log('failed')
+    return {
+        type: 'POST_REMOTE_FAILED',
+        error: error,
+    }
+}
+
 export function postRemote(dispatch, payload) {
     console.log('payload')
     console.log(payload)
@@ -62,7 +77,8 @@ export function postRemote(dispatch, payload) {
         data: payload,
     })
         .then(response => dispatch(postRemoteSuccess(response.data)))
-        .catch(error => error.response);
+        .catch(error => dispatch(postRemoteError(error.response))
+        );
     return {
         type: 'POST_REMOTE',
         payload: request
