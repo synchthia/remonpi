@@ -4,13 +4,6 @@ import (
 	"github.com/synchthia/remonpi/template"
 )
 
-// Template - Remote Template
-type Template struct {
-	Cool *ModeTemplate `json:"cool"`
-	Dry  *ModeTemplate `json:"dry"`
-	Heat *ModeTemplate `json:"heat"`
-}
-
 // ModeTemplate - Template individual Modes
 type ModeTemplate struct {
 	Temp           *template.Value `json:"temp"`
@@ -19,29 +12,12 @@ type ModeTemplate struct {
 	VerticalVane   *template.Value `json:"vertical_vane"`
 }
 
-// GetByMode - Get Value by Mode
-func (t *Template) GetByMode(mode string) *ModeTemplate {
-	switch mode {
-	case "cool":
-		return t.Cool
-	case "dry":
-		return t.Dry
-	case "heat":
-		return t.Heat
-	default:
-		return nil
-	}
-}
-
 var (
-	// ModeList - List of Mode
-	ModeList = []string{"cool", "dry", "heat"}
-
 	// TemplateData - Entries of Template
-	TemplateData = Template{
-		Cool: &ModeTemplate{
+	TemplateData = map[string]*ModeTemplate{
+		"cool": &ModeTemplate{
 			Temp: &template.Value{
-				Type:    "RANGE",
+				Type:    "range",
 				Default: float32(21.0),
 				Range: &template.Range{
 					Step: 1,
@@ -50,7 +26,7 @@ var (
 				},
 			},
 			Fan: &template.Value{
-				Type:    "STEP",
+				Type:    "step",
 				Default: "auto",
 				Step: []string{
 					"auto",
@@ -60,7 +36,7 @@ var (
 				},
 			},
 			HorizontalVane: &template.Value{
-				Type:    "STEP",
+				Type:    "step",
 				Default: "auto",
 				Step: []string{
 					"auto",
@@ -72,24 +48,24 @@ var (
 				},
 			},
 			VerticalVane: &template.Value{
-				Type:    "BUTTON",
+				Type:    "shot",
 				Default: "keep",
-				Button: []string{
-					"keep",
-					"swing",
+				Shot: &template.Shot{
+					Value:    "toggle",
+					SendOnly: true,
 				},
 			},
 		},
-		Dry: &ModeTemplate{
+		"dry": &ModeTemplate{
 			Fan: &template.Value{
-				Type:    "STEP",
+				Type:    "step",
 				Default: "auto",
 				Step: []string{
 					"auto",
 				},
 			},
 			HorizontalVane: &template.Value{
-				Type:    "STEP",
+				Type:    "step",
 				Default: "auto",
 				Step: []string{
 					"auto",
@@ -101,17 +77,17 @@ var (
 				},
 			},
 			VerticalVane: &template.Value{
-				Type:    "BUTTON",
+				Type:    "shot",
 				Default: "keep",
-				Button: []string{
-					"keep",
-					"swing",
+				Shot: &template.Shot{
+					Value:    "toggle",
+					SendOnly: true,
 				},
 			},
 		},
-		Heat: &ModeTemplate{
+		"heat": &ModeTemplate{
 			Temp: &template.Value{
-				Type:    "RANGE",
+				Type:    "range",
 				Default: float32(27.0),
 				Range: &template.Range{
 					Step: 1,
@@ -120,7 +96,7 @@ var (
 				},
 			},
 			Fan: &template.Value{
-				Type:    "STEP",
+				Type:    "step",
 				Default: "auto",
 				Step: []string{
 					"auto",
@@ -130,7 +106,7 @@ var (
 				},
 			},
 			HorizontalVane: &template.Value{
-				Type:    "STEP",
+				Type:    "step",
 				Default: "auto",
 				Step: []string{
 					"auto",
@@ -142,11 +118,11 @@ var (
 				},
 			},
 			VerticalVane: &template.Value{
-				Type:    "BUTTON",
+				Type:    "shot",
 				Default: "keep",
-				Button: []string{
-					"keep",
-					"swing",
+				Shot: &template.Shot{
+					Value:    "toggle",
+					SendOnly: true,
 				},
 			},
 		},

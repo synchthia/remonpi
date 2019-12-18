@@ -29,38 +29,38 @@ func (c *remoteController) Set(d *models.RemoteData) error {
 	data.Operation = d.Operation
 
 	// Mode
-	if template.GetByMode(d.Mode) == nil {
+	if template[d.Mode] == nil {
 		return errors.New("invalid mode provided")
 	}
 	data.Mode = d.Mode
 
 	// Temp
-	if template.GetByMode(d.Mode).Temp != nil {
-		if err := template.GetByMode(d.Mode).Temp.Validate(d.Temp); err != nil {
+	if template[d.Mode].Temp != nil {
+		if err := template[d.Mode].Temp.Validate(d.Temp); err != nil {
 			return err
 		}
 		data.Temp = d.Temp
 	}
 
 	// Fan
-	if template.GetByMode(d.Mode).Fan != nil {
-		if err := template.GetByMode(d.Mode).Fan.Validate(d.Fan); err != nil {
+	if template[d.Mode].Fan != nil {
+		if err := template[d.Mode].Fan.Validate(d.Fan); err != nil {
 			return err
 		}
 		data.Fan = d.Fan
 	}
 
 	// HorizontalVane
-	if template.GetByMode(d.Mode).HorizontalVane != nil {
-		if err := template.GetByMode(d.Mode).HorizontalVane.Validate(d.HorizontalVane); err != nil {
+	if template[d.Mode].HorizontalVane != nil {
+		if err := template[d.Mode].HorizontalVane.Validate(d.HorizontalVane); err != nil {
 			return err
 		}
 		data.HorizontalVane = d.HorizontalVane
 	}
 
 	// VerticalVane
-	if template.GetByMode(d.Mode).VerticalVane != nil {
-		if err := template.GetByMode(d.Mode).VerticalVane.Validate(d.VerticalVane); err != nil {
+	if template[d.Mode].VerticalVane != nil {
+		if err := template[d.Mode].VerticalVane.Validate(d.VerticalVane); err != nil {
 			return err
 		}
 		data.VerticalVane = d.VerticalVane
@@ -89,7 +89,7 @@ func (c *remoteController) Set(d *models.RemoteData) error {
 // Generate - Generate Hex Code
 func (c *remoteController) Generate(d *models.RemoteData, opt *models.GenerateOption) ([][]int, error) {
 	template := TemplateData
-	templateByMode := template.GetByMode(d.Mode)
+	templateByMode := template[d.Mode]
 
 	signal := [][]int{
 		{0x23, 0xCB, 0x26, 0x01, 0x00, 0x24, 0x03, 0x0B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
