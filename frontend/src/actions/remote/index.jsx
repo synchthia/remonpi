@@ -11,7 +11,7 @@ export function fetchRemoteSuccess(payload) {
 export function fetchRemoteError(error) {
     return {
         type: 'FETCH_REMOTE_FAILED',
-        payload: {error},
+        error: error,
     }
 }
 
