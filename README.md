@@ -1,5 +1,7 @@
 RemonPi
 =========================================
+> # Deprecated
+> We are migrated to [Dash-Home](https://github.com/dash-app/dash-home). Please see here.
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/synchthia/remonpi)](https://goreportcard.com/report/github.com/synchthia/remonpi)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsynchthia%2Fremonpi.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsynchthia%2Fremonpi?ref=badge_shield)
