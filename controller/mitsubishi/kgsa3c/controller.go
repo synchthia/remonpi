@@ -71,9 +71,11 @@ func (c *remoteController) Set(d *models.RemoteData) error {
 		return err
 	}
 
-	if err := sender.Send(signal); err != nil {
-		return err
-	}
+	go func() {
+		if err := sender.Send(signal); err != nil {
+			panic(err)
+		}
+	}()
 
 	if err := c.database.UpdateState(data); err != nil {
 		return err

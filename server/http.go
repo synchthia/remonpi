@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/rakyll/statik/fs"
 	"github.com/sirupsen/logrus"
-	"github.com/synchthia/remonpi/controller/mitsubishi/kgsa3c"
 	"github.com/synchthia/remonpi/logger"
 	"github.com/synchthia/remonpi/models"
 	"github.com/synchthia/remonpi/remote"
@@ -115,7 +114,5 @@ func (h *httpServer) postRemote(c *gin.Context) {
 }
 
 func (h *httpServer) getTemplate(c *gin.Context) {
-	if h.Remote.Vendor == "mitsubishi" && h.Remote.Model == "kgsa3-c" {
-		c.JSON(http.StatusOK, kgsa3c.TemplateData)
-	}
+	c.JSON(http.StatusOK, h.Remote.Template)
 }

@@ -1,5 +1,6 @@
 const initialState = {
-    payload: null
+    payload: null,
+    error: null
 }
 export const template = (state = initialState, action) => {
     switch (action.type) {
@@ -12,6 +13,11 @@ export const template = (state = initialState, action) => {
             return {
                 ...state,
                 payload: action.payload
+            }
+        case 'FETCH_TEMPLATE_FAILED':
+            return {
+                ...state,
+                error: action.error
             }
         default:
             return state

@@ -13,6 +13,7 @@ type Remote struct {
 
 	Controller controller.Controller
 	Database   controller.Database
+	Template   interface{}
 }
 
 // NewRemote - Initialize Remote
@@ -25,6 +26,7 @@ func NewRemote(vendor string, model string, dbPath string) *Remote {
 	if vendor == "mitsubishi" && model == "kgsa3-c" {
 		r.Database = kgsa3c.NewDatabase(vendor, model, dbPath)
 		r.Controller = kgsa3c.EnsureController(r.Database)
+		r.Template = kgsa3c.TemplateData
 	}
 	return r
 }
